@@ -1,8 +1,7 @@
+import sqlite3
+
 import bs4 as bs
 import sys
-import schedule
-import time
-import urllib.request
 from PyQt5.QtWebEngineWidgets import QWebEnginePage
 from PyQt5.QtWidgets import QApplication
 from PyQt5.QtCore import QUrl
@@ -51,7 +50,10 @@ def mainprogram(url):
     if js_test is None:
         js_test = soup.find('span', id='priceblock_dealprice')
     name = soup.find('span', id='productTitle')
+    image = soup.find('img', id='src')
     str = ""
+    if js_test is None:
+        return (-1,-1)
     for line in js_test.stripped_strings:
         str = line
     product = ''
@@ -62,7 +64,8 @@ def mainprogram(url):
     str = str.replace(", ", "")
     your_price = 600
     print(str)
-    return (product, str)
+    print(image)
+    return (product, str, image)
 
 
 
@@ -73,6 +76,18 @@ def job(url):
 def get_price(url):
     return job(url)
 
+def get_url(message):
+    connection = sqlite3.connect("person_url.dp")
 
+    info = message.chat.id, message.text
+    cursor = connection.cursor()
 
-
+    try:
+        cursor.execute("INSERT INTO url VALUES (?, ?)", info)
+    except sqlite3.IntegrityError as e:
+        if 'UNIQUE constraint' not in repr(e):
+            raise e
+    print("User add url: {name}".format(name=message.text))
+    connection.commit()
+    cursor.close()
+    connection.close()
