@@ -77,11 +77,10 @@ def get_price(url):
     return job(url)
 
 def get_url(message):
-    connection = sqlite3.connect("person_url.dp")
+    connection = sqlite3.connect("info.dp")
 
     info = message.chat.id, message.text
     cursor = connection.cursor()
-
     try:
         cursor.execute("INSERT INTO url VALUES (?, ?)", info)
     except sqlite3.IntegrityError as e:
