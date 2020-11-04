@@ -78,9 +78,10 @@ def get_price(url):
 
 def get_url(message):
     connection = sqlite3.connect("info.dp")
-
     info = message.chat.id, message.text
     cursor = connection.cursor()
+
+    cursor.execute("CREATE TABLE IF NOT EXISTS url (id int, url text, PRIMARY key(id, url)) ")
     try:
         cursor.execute("INSERT INTO url VALUES (?, ?)", info)
     except sqlite3.IntegrityError as e:
