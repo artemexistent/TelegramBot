@@ -91,3 +91,23 @@ def get_url(message):
     connection.commit()
     cursor.close()
     connection.close()
+
+def get_ebay(url):
+    from bs4 import BeautifulSoup
+    import requests
+    res = requests.get(url)
+    res.raise_for_status()
+    soup = BeautifulSoup(res.text, 'html.parser')
+    print(soup)
+    name = soup.find('h1', {'class':"it-ttl"})
+    price = soup.find('span', id='convbinPrice')
+    product = ''
+    for line in price.stripped_strings:
+        product = line
+        break
+    str = ''
+    for line in name.stripped_strings:
+        str=line
+    # print("Item Name: " + name)
+    print(str)
+    print(product)
