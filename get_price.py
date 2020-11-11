@@ -102,12 +102,14 @@ def get_ebay(url):
     name = soup.find('h1', {'class':"it-ttl"})
     price = soup.find('span', id='convbinPrice')
     product = ''
+    if price is None:
+        return (-1,-1)
     for line in price.stripped_strings:
         product = line
         break
     str = ''
     for line in name.stripped_strings:
         str=line
-    # print("Item Name: " + name)
     print(str)
     print(product)
+    return (str,product)
