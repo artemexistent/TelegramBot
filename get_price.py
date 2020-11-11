@@ -98,7 +98,6 @@ def get_ebay(url):
     res = requests.get(url)
     res.raise_for_status()
     soup = BeautifulSoup(res.text, 'html.parser')
-    print(soup)
     name = soup.find('h1', {'class':"it-ttl"})
     price = soup.find('span', id='convbinPrice')
     product = ''
@@ -112,4 +111,5 @@ def get_ebay(url):
         str=line
     print(str)
     print(product)
+
     return (str,product)
